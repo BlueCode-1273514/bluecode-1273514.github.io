@@ -368,7 +368,7 @@
         <div class="card-right">
 
             <div class="daily-quote">
-                <span class="quote-label">随机一句</span>
+                <span class="quote-label">今日一句</span>
                 <span class="quote-text" id="quoteText">加载中……</span>
             </div>
 
@@ -462,9 +462,19 @@
             document.body.classList.remove('pink-mode');
         });
 
-        // ===== 随机一句 =====
+        // ===== 每日一句（同一天固定一句） =====
         async function loadDailyQuote() {
             var quoteEl = document.getElementById('quoteText');
+
+            var today = new Date();
+            var dateKey = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+            var cacheKey = 'daily_quote_' + dateKey;
+
+            var cached = localStorage.getItem(cacheKey);
+            if (cached) {
+                quoteEl.textContent = cached;
+                return;
+            }
 
             try {
                 var response = await fetch(
@@ -490,7 +500,10 @@
                 }
 
                 var author = data.from_who || data.from || '佚名';
-                quoteEl.textContent = data.hitokoto + ' —— ' + author;
+                var text = data.hitokoto + ' —— ' + author;
+
+                quoteEl.textContent = text;
+                localStorage.setItem(cacheKey, text);
             } catch (error) {
                 quoteEl.textContent = '今天也要加油鸭！';
             }
