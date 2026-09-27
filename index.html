@@ -8,11 +8,55 @@
     <link rel="icon" href="picture/picture.webp" type="image/webp">
     <link rel="apple-touch-icon" href="picture/picture.webp">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg-blue-1: #9fc7ff;
+            --bg-blue-2: #b8dcff;
+            --bg-base: #a8cfff;
+            --card-bg: #ffffff;
+            --card-left-bg: #fafcff;
+            --card-border: rgba(255, 255, 255, 0.8);
+            --divider: #eef3f9;
+            --text-main: #2c3e50;
+            --text-sub: #5a6a7a;
+            --text-light: #7f8c8d;
+            --text-muted: #95a5a6;
+            --bio-border: #e8e8e8;
+            --link-color: #3498db;
+            --btn-bg: #4facfe;
+            --btn-hover: #2f9bfe;
+            --quote-bg: #f8faff;
+            --quote-border: #4facfe;
+            --quote-label: #4facfe;
+            --quote-text: #34495e;
+            --shadow-card: 0 12px 32px rgba(31, 64, 120, 0.16), 0 2px 8px rgba(31, 64, 120, 0.08);
+            --shadow-card-hover: 0 20px 48px rgba(31, 64, 120, 0.22), 0 4px 12px rgba(31, 64, 120, 0.1);
         }
+
+        body.dark-mode {
+            --bg-blue-1: #1e3a6e;
+            --bg-blue-2: #2a4a80;
+            --bg-base: #1e3a6e;
+            --card-bg: #2a4a80;
+            --card-left-bg: #24406e;
+            --card-border: rgba(255, 255, 255, 0.1);
+            --divider: #35507e;
+            --text-main: #e8eef5;
+            --text-sub: #b8c8d8;
+            --text-light: #94a5ba;
+            --text-muted: #8495aa;
+            --bio-border: #35507e;
+            --link-color: #6dbfe8;
+            --btn-bg: #4facfe;
+            --btn-hover: #3a9bee;
+            --quote-bg: #24406e;
+            --quote-border: #6dbfe8;
+            --quote-label: #6dbfe8;
+            --quote-text: #d0e0f0;
+            --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.2);
+            --shadow-card-hover: 0 20px 48px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
@@ -20,10 +64,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #a8cfff;
+            background: var(--bg-base);
             padding: 24px;
             position: relative;
             overflow: hidden;
+            transition: background 0.5s ease;
         }
 
         body::before {
@@ -34,9 +79,18 @@
                 radial-gradient(circle at 15% 10%, rgba(255, 255, 255, 0.95), transparent 42%),
                 radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.55), transparent 38%),
                 radial-gradient(circle at 88% 90%, rgba(255, 255, 255, 0.45), transparent 40%),
-                linear-gradient(135deg, #9fc7ff, #b8dcff);
+                linear-gradient(135deg, var(--bg-blue-1), var(--bg-blue-2));
             pointer-events: none;
             z-index: 0;
+            transition: background 0.5s ease;
+        }
+
+        body.dark-mode::before {
+            background:
+                radial-gradient(circle at 15% 10%, rgba(100, 150, 220, 0.25), transparent 42%),
+                radial-gradient(circle at 30% 25%, rgba(80, 130, 200, 0.15), transparent 38%),
+                radial-gradient(circle at 88% 90%, rgba(80, 130, 200, 0.15), transparent 40%),
+                linear-gradient(135deg, var(--bg-blue-1), var(--bg-blue-2));
         }
 
         body .pink-overlay {
@@ -53,8 +107,14 @@
             transition: opacity 0.8s ease;
         }
 
-        body.pink-mode .pink-overlay {
-            opacity: 1;
+        body.pink-mode .pink-overlay { opacity: 1; }
+
+        body.dark-mode .pink-overlay {
+            background:
+                radial-gradient(circle at 15% 10%, rgba(255, 180, 220, 0.12), transparent 42%),
+                radial-gradient(circle at 30% 25%, rgba(255, 150, 200, 0.08), transparent 38%),
+                radial-gradient(circle at 88% 90%, rgba(255, 150, 200, 0.08), transparent 40%),
+                linear-gradient(135deg, #4a2f3e, #5a3548);
         }
 
         body::after {
@@ -69,6 +129,13 @@
             z-index: 0;
             -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 55%, transparent 100%);
             mask-image: radial-gradient(circle at 50% 50%, #000 55%, transparent 100%);
+            transition: background-image 0.5s ease;
+        }
+
+        body.dark-mode::after {
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
         }
 
         .card {
@@ -76,59 +143,63 @@
             z-index: 1;
             width: 100%;
             max-width: 720px;
-            background: #fff;
+            background: var(--card-bg);
             border-radius: 6px;
             overflow: hidden;
-            box-shadow:
-                0 1px 2px rgba(0, 0, 0, 0.04),
-                0 12px 32px rgba(31, 64, 120, 0.16),
-                0 2px 8px rgba(31, 64, 120, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--card-border);
             display: flex;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.5s ease, background 0.5s ease, border-color 0.5s ease;
         }
 
         .card:hover {
             transform: translateY(-4px);
-            box-shadow:
-                0 2px 4px rgba(0, 0, 0, 0.06),
-                0 20px 48px rgba(31, 64, 120, 0.22),
-                0 4px 12px rgba(31, 64, 120, 0.1);
+            box-shadow: var(--shadow-card-hover);
         }
 
         .card-left {
             width: 200px;
             flex-shrink: 0;
-            background: #fafcff;
-            border-right: 1px solid #eef3f9;
+            background: var(--card-left-bg);
+            border-right: 1px solid var(--divider);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 28px 16px;
+            transition: background 0.5s ease, border-color 0.5s ease;
         }
 
         .avatar {
             width: 90px;
             height: 90px;
             border-radius: 50%;
-            border: 4px solid #fff;
+            border: 4px solid var(--card-bg);
             object-fit: cover;
             margin-bottom: 14px;
             box-shadow: 0 6px 18px rgba(102, 126, 234, 0.3);
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.2s ease, border-color 0.5s ease;
+        }
+
+        .avatar:hover {
+            transform: scale(1.05);
         }
 
         .card-left .name {
             font-size: 20px;
             font-weight: 700;
-            color: #2c3e50;
+            color: var(--text-main);
             margin-bottom: 4px;
+            transition: color 0.5s ease;
         }
 
         .card-left .title {
             font-size: 12px;
-            color: #7f8c8d;
+            color: var(--text-light);
             text-align: center;
+            transition: color 0.5s ease;
         }
 
         .card-right {
@@ -142,11 +213,12 @@
 
         .bio {
             font-size: 13px;
-            color: #5a6a7a;
+            color: var(--text-sub);
             line-height: 1.7;
             margin-bottom: 18px;
             padding-bottom: 16px;
-            border-bottom: 1px dashed #e8e8e8;
+            border-bottom: 1px dashed var(--bio-border);
+            transition: color 0.5s ease, border-color 0.5s ease;
         }
 
         .contact-grid {
@@ -161,13 +233,15 @@
             align-items: center;
             gap: 10px;
             font-size: 13px;
-            color: #34495e;
+            color: var(--text-sub);
             min-width: 0;
+            transition: color 0.5s ease;
         }
 
         .contact-item .label {
-            color: #95a5a6;
+            color: var(--text-muted);
             flex-shrink: 0;
+            transition: color 0.5s ease;
         }
 
         .contact-item a,
@@ -178,14 +252,12 @@
         }
 
         .contact-item a {
-            color: #3498db;
+            color: var(--link-color);
             text-decoration: none;
             transition: color 0.8s ease;
         }
 
-        .contact-item a:hover {
-            text-decoration: underline;
-        }
+        .contact-item a:hover { text-decoration: underline; }
 
         .card-actions {
             display: flex;
@@ -203,16 +275,17 @@
             text-align: center;
             text-decoration: none;
             display: inline-block;
+            border: none;
         }
 
         .btn-primary {
-            background: #4facfe;
+            background: var(--btn-bg);
             color: #fff;
             box-shadow: 0 4px 12px rgba(79, 172, 254, 0.35);
         }
 
         .btn-primary:hover {
-            background: #2f9bfe;
+            background: var(--btn-hover);
             box-shadow: 0 6px 18px rgba(79, 172, 254, 0.5);
             transform: translateY(-1px);
         }
@@ -226,8 +299,9 @@
 
         .music-player .music-label {
             font-size: 13px;
-            color: #95a5a6;
+            color: var(--text-muted);
             flex-shrink: 0;
+            transition: color 0.5s ease;
         }
 
         .music-player audio {
@@ -238,48 +312,42 @@
             min-width: 0;
         }
 
-        /* ===== 每日一句 ===== */
         .daily-quote {
             display: flex;
             align-items: flex-start;
             gap: 10px;
             padding: 12px 14px;
             margin-bottom: 18px;
-            background: #f8faff;
-            border-left: 3px solid #4facfe;
+            background: var(--quote-bg);
+            border-left: 3px solid var(--quote-border);
             border-radius: 4px;
             font-size: 13px;
             line-height: 1.7;
-            transition: background 0.8s ease, border-color 0.8s ease;
+            transition: background 0.5s ease, border-color 0.5s ease;
         }
 
         .daily-quote .quote-label {
-            color: #4facfe;
+            color: var(--quote-label);
             font-weight: 600;
             flex-shrink: 0;
             white-space: nowrap;
-            transition: color 0.8s ease;
+            transition: color 0.5s ease;
         }
 
         .daily-quote .quote-text {
-            color: #34495e;
+            color: var(--quote-text);
             flex: 1;
             min-width: 0;
+            transition: color 0.5s ease;
         }
 
-        /* ===== 播放时按钮和超链接变红 ===== */
         body.pink-mode .daily-quote {
             background: #fff0f0;
             border-left-color: #e74c3c;
         }
 
-        body.pink-mode .daily-quote .quote-label {
-            color: #e74c3c;
-        }
-
-        body.pink-mode .contact-item a {
-            color: #e74c3c;
-        }
+        body.pink-mode .daily-quote .quote-label { color: #e74c3c; }
+        body.pink-mode .contact-item a { color: #e74c3c; }
 
         body.pink-mode .btn-primary {
             background: #e74c3c;
@@ -301,17 +369,11 @@
                 width: 100%;
                 padding: 24px 16px;
                 border-right: none;
-                border-bottom: 1px solid #eef3f9;
+                border-bottom: 1px solid var(--divider);
             }
-            .card-right {
-                padding: 22px 22px;
-            }
-            .contact-grid {
-                grid-template-columns: 1fr;
-            }
-            .card-actions {
-                justify-content: center;
-            }
+            .card-right { padding: 22px 22px; }
+            .contact-grid { grid-template-columns: 1fr; }
+            .card-actions { justify-content: center; }
         }
     </style>
 </head>
@@ -322,14 +384,13 @@
     <div class="card">
 
         <div class="card-left">
-            <img class="avatar" src="picture/picture.webp" alt="1273514">
+            <img class="avatar" id="avatar" src="picture/picture.webp" alt="1273514" title="双击切换深色模式">
             <div class="name">BlueCode</div>
             <div class="title">一个 OIer</div>
         </div>
 
         <div class="card-right">
 
-            <!-- 每日一句 -->
             <div class="daily-quote">
                 <span class="quote-label">今日一句</span>
                 <span class="quote-text" id="quoteText">加载中……</span>
@@ -386,9 +447,29 @@
     </div>
 
     <script>
-        // ===== 配置 =====
         var SUPABASE_URL = 'https://nnekudnbordbvikklfci.supabase.co';
         var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5uZWt1ZG5ib3JkYnZpa2tsZmNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA0MDU3MTMsImV4cCI6MjEwNTk4MTcxM30.1dlBtek7UJLCSlhCqXFN0Gox7AF58h05TCbO_ePH2qc';
+
+        // ===== 双击头像切换深色模式 =====
+        var THEME_KEY = 'bluecode_theme';
+        var avatar = document.getElementById('avatar');
+
+        function applyTheme(isDark) {
+            if (isDark) {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+        }
+
+        avatar.addEventListener('dblclick', function() {
+            var isDark = !document.body.classList.contains('dark-mode');
+            localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
+            applyTheme(isDark);
+        });
+
+        var savedTheme = localStorage.getItem(THEME_KEY);
+        applyTheme(savedTheme === 'dark');
 
         // ===== 音乐彩蛋 =====
         var music = document.getElementById('bgMusic');
@@ -405,9 +486,20 @@
             document.body.classList.remove('pink-mode');
         });
 
-        // ===== 每日一句（通过 Supabase Edge Function 代理 Hitokoto） =====
+        // ===== 每日一句 =====
         async function loadDailyQuote() {
             var quoteEl = document.getElementById('quoteText');
+
+            var today = new Date();
+            var dateKey = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+            var cacheKey = 'daily_quote_' + dateKey;
+
+            var cached = localStorage.getItem(cacheKey);
+            if (cached) {
+                quoteEl.textContent = cached;
+                return;
+            }
+
             try {
                 var response = await fetch(
                     SUPABASE_URL + '/functions/v1/hitokoto',
@@ -432,7 +524,10 @@
                 }
 
                 var author = data.from_who || data.from || '佚名';
-                quoteEl.textContent = data.hitokoto + ' —— ' + author;
+                var text = data.hitokoto + ' —— ' + author;
+
+                quoteEl.textContent = text;
+                localStorage.setItem(cacheKey, text);
             } catch (error) {
                 quoteEl.textContent = '今天也要加油鸭！';
             }
